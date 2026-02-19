@@ -12,23 +12,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PZ13ValovMaximPr23101Mobil">
         <activity
+            android:name=".dialog_skin_shop"
+            android:exported="false" />
+        <activity
+            android:name=".item_skin"
+            android:exported="false" />
+        <activity
             android:name=".splash"
             android:exported="true"
-            android:screenOrientation="landscape">  <!-- или твой основной theme -->
+            android:screenOrientation="landscape"> <!-- или твой основной theme -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".MainMenu"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:screenOrientation="landscape"/>
-
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

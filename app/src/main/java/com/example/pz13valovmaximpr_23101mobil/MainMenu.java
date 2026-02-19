@@ -40,6 +40,8 @@ public class MainMenu extends AppCompatActivity {
             prefs1.edit().clear().apply();
             SharedPreferences prefs2 = getSharedPreferences("difficult_prefs", MODE_PRIVATE);
             prefs2.edit().clear().apply();
+            SharedPreferences prefs3 = getSharedPreferences("race_prefs", MODE_PRIVATE);
+            prefs3.edit().clear().apply();
             Toast.makeText(this, "Все сохранения удалены!", Toast.LENGTH_LONG).show();
         });
 
