@@ -47,7 +47,7 @@
         android:layout_height="51dp"
         android:backgroundTint="@android:color/holo_blue_dark"
         android:onClick="Start"
-        android:text="Button"
+        android:text="Старт"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -57,8 +57,8 @@
         android:layout_width="139dp"
         android:layout_height="51dp"
         android:backgroundTint="@android:color/holo_green_dark"
-        android:text="Button"
         android:onClick="Drive1"
+        android:text="Газ"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_start"
         app:layout_constraintStart_toStartOf="parent" />
@@ -68,11 +68,21 @@
         android:layout_width="139dp"
         android:layout_height="51dp"
         android:backgroundTint="@android:color/holo_red_dark"
-        android:text="Button"
         android:onClick="Drive2"
+        android:text="Газ"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btn_start" />
+
+    <Button
+        android:id="@+id/btn_exit"
+        android:layout_width="139dp"
+        android:layout_height="51dp"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:onClick="Drive2"
+        android:text="Выход"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/lb_result"
@@ -106,4 +116,27 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_difficult_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Сложность:"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/spinner_difficulty"
+        app:layout_constraintEnd_toEndOf="@+id/spinner_difficulty"
+        app:layout_constraintStart_toStartOf="@+id/spinner_difficulty" />
+
+    <Spinner
+        android:id="@+id/spinner_difficulty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:background="@android:drawable/button_onoff_indicator_off"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toEndOf="@+id/btn_start" />
 </androidx.constraintlayout.widget.ConstraintLayout>
