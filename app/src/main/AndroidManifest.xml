@@ -13,7 +13,8 @@
         android:theme="@style/Theme.PZ13ValovMaximPr23101Mobil">
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
