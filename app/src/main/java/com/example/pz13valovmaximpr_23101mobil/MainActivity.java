@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
     private Button btnRed;
 
     private int fixedCarWidth = 0;
-    private int fixedCarHeight = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
             initDifficultySpinner();
             spinnerDifficulty.setVisibility(View.VISIBLE);
             difficultLabel.setVisibility(View.VISIBLE);
-            btnRed.setVisibility(View.GONE);
         } else {
             spinnerDifficulty.setVisibility(View.GONE);
             difficultLabel.setVisibility(View.GONE);
@@ -125,9 +123,8 @@ public class MainActivity extends AppCompatActivity {
         spinnerLength.setVisibility(View.VISIBLE);
         lengthLabel.setVisibility(View.VISIBLE);
 
-        // Клик по машинам → магазин для конкретной машины
         Car1.setOnClickListener(v -> {
-            if (!Started) {               // только когда игра ещё не началась
+            if (!Started) {
                 editingCar = 1;
                 showSkinShop();
             }
@@ -147,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
         Car1.post(() -> {
             if (fixedCarWidth == 0 && Car1.getMeasuredWidth() > 0) {
                 fixedCarWidth = Car1.getMeasuredWidth();
-                fixedCarHeight = Car1.getMeasuredHeight();
             }
             applyFixedSizeToBothCars();
         });
@@ -209,12 +205,10 @@ public class MainActivity extends AppCompatActivity {
 
         ViewGroup.LayoutParams lp1 = Car1.getLayoutParams();
         lp1.width = fixedCarWidth;
-        lp1.height = fixedCarHeight;
         Car1.setLayoutParams(lp1);
 
         ViewGroup.LayoutParams lp2 = Car2.getLayoutParams();
         lp2.width = fixedCarWidth;
-        lp2.height = fixedCarHeight;
         Car2.setLayoutParams(lp2);
 
         Car1.requestLayout();
@@ -234,7 +228,6 @@ public class MainActivity extends AppCompatActivity {
 
         currentShopDialog.show();
 
-        // Делаем диалог почти на всю ширину экрана
         DisplayMetrics dm = getResources().getDisplayMetrics();
         Window window = currentShopDialog.getWindow();
         if (window != null) {
@@ -251,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
             if (statusA != statusB) return Integer.compare(statusB, statusA);
 
             if (statusA == 1) return Integer.compare(b.getCost(), a.getCost()); // купленные: дорогие → дешёвые
-            else return Integer.compare(a.getCost(), b.getCost());             // некупленные: дешёвые → дорогие
+            else return Integer.compare(a.getCost(), b.getCost()); // некупленные: дешёвые → дорогие
         });
         return sorted;
     }
@@ -560,11 +553,11 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 saveProgress();
-                applySkinsToCars();        // ← обновляем картинки
-                applyFixedSizeToBothCars();        // ← ИСПРАВЛЕНИЕ №2: сразу выравниваем размер
+                applySkinsToCars();
+                applyFixedSizeToBothCars();
 
                 if (currentShopDialog != null) currentShopDialog.dismiss();
-                showSkinShop(); // обновляем список
+                showSkinShop();
             });
 
             return convertView;
