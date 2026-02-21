@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">PZ13ValovMaximPr-23101Mobil</string>
+    <string name="skin_photo">skin photo</string>
+    <string name="background_sprite">background sprite</string>
+    <string name="garbage_sprite">garbage sprite</string>
+    <string name="player_2_car_sprite">player 2 car sprite</string>
+    <string name="player_1_car_sprite">player 1 car sprite</string>
+    <string name="car_sprite">car sprite</string>
+    <string name="computer_sprite">computer sprite</string>
+    <string name="vs_ai">Против бота</string>
+    <string name="delete_save">Удалить сохранение</string>
+    <string name="pvp">Друг против друга</string>
+    <string name="exit">Выход</string>
+    <string name="Gaz">Газ</string>
+    <string name="Start">Старт</string>
+    <string name="finish_image">finish image</string>
+    <string name="first_player_sprite">first player sprite</string>
+    <string name="second_player_sprite">second player sprite</string>
+    <string name="diffidculty">Сложность:</string>
+    <string name="track_length">Длина трассы:</string>
+    <string name="game_icon">game icon</string>
+    <string name="loading">Загрузка</string>
 </resources>

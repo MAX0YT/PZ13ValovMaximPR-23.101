@@ -1,7 +1,6 @@
 package com.example.pz13valovmaximpr_23101mobil;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +8,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -18,12 +18,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
@@ -31,6 +30,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView difficultLabel;
 
     // === СКИНЫ (отдельные для каждой машины) ===
-    private List<Skin> allSkins = new ArrayList<>();
+    private final List<Skin> allSkins = new ArrayList<>();
     private Set<String> boughtSkins = new HashSet<>();
     private String selectedSkinIdGreen = "blue1";   // зелёная машина (игрок 1)
     private String selectedSkinIdRed = "blue1";     // красная машина (игрок 2 / бот)
@@ -70,17 +70,20 @@ public class MainActivity extends AppCompatActivity {
     private Button btnGreen;
     private Button btnRed;
 
+    private int fixedCarWidth = 0;
+    private int fixedCarHeight = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            this.getSupportActionBar().hide();
-        } catch (NullPointerException e) {}
+            Objects.requireNonNull(this.getSupportActionBar()).hide();
+        } catch (NullPointerException ignored) {}
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.btn_exit).setOnClickListener(v -> onBackPressed());
-        ((Button)findViewById(R.id.btn_start)).setBackgroundTintList(ColorStateList.valueOf(Color.BLUE));
+        (findViewById(R.id.btn_start)).setBackgroundTintList(ColorStateList.valueOf(Color.BLUE));
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -103,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         loadProgress();
         initSkins();
         applySkinsToCars();
-        makeCarsSameSize();
+        measureAndFixCarSize();
 
         initLengthSpinner();
 
@@ -124,31 +127,42 @@ public class MainActivity extends AppCompatActivity {
 
         // Клик по машинам → магазин для конкретной машины
         Car1.setOnClickListener(v -> {
-            editingCar = 1;
-            showSkinShop();
+            if (!Started) {               // только когда игра ещё не началась
+                editingCar = 1;
+                showSkinShop();
+            }
         });
+
         Car2.setOnClickListener(v -> {
-            editingCar = 2;
-            showSkinShop();
+            if (!Started) {
+                editingCar = 2;
+                showSkinShop();
+            }
         });
 
         carLength = Car1.getWidth();
         startMargin = ((ViewGroup.MarginLayoutParams) Car1.getLayoutParams()).leftMargin;
     }
-
+    private void measureAndFixCarSize() {
+        Car1.post(() -> {
+            if (fixedCarWidth == 0 && Car1.getMeasuredWidth() > 0) {
+                fixedCarWidth = Car1.getMeasuredWidth();
+                fixedCarHeight = Car1.getMeasuredHeight();
+            }
+            applyFixedSizeToBothCars();
+        });
+    }
     private void initSkins() {
         allSkins.clear();
-        allSkins.add(new Skin("blue1", "Развалюха", R.drawable.car1, 0, 0.5f));
-        allSkins.add(new Skin("red1", "Колымага", R.drawable.red1, 100, 0.7f));
+        allSkins.add(new Skin("blue1", "Развалюха", R.drawable.blue1, 100, 0.5f));
         allSkins.add(new Skin("yellow1", "Машинка", R.drawable.yellow1, 300, 1.0f));
-        allSkins.add(new Skin("car1", "Зелёный луг", R.drawable.car1, 800, 1.3f));
-        allSkins.add(new Skin("yellow2", "Яркое солнце", R.drawable.yellow2, 1000, 1.6f));
-        allSkins.add(new Skin("orange1", "Скоростной огонёк", R.drawable.orange1, 1300, 1.9f));
-        allSkins.add(new Skin("car2", "Красная ярость", R.drawable.car2, 1700, 2.3f));
-        allSkins.add(new Skin("purple1", "Плазма", R.drawable.purple1, 2300, 2.7f));
-        allSkins.add(new Skin("police1", "Полиция", R.drawable.police1, 3000, 3.22f));
-        allSkins.add(new Skin("white1", "Вспышка", R.drawable.white1, 4000, 4f));
-        allSkins.add(new Skin("blue2", "Ракета", R.drawable.blue2, 5000, 6f));
+        allSkins.add(new Skin("car1", "Зелёный луг", R.drawable.car1, 1000, 1.3f));
+        allSkins.add(new Skin("yellow2", "Яркое солнце", R.drawable.yellow2, 2500, 1.6f));
+        allSkins.add(new Skin("orange1", "Скоростной огонёк", R.drawable.orange1, 3700, 1.9f));
+        allSkins.add(new Skin("car2", "Красная ярость", R.drawable.car2, 5000, 2.3f));
+        allSkins.add(new Skin("purple1", "Плазма", R.drawable.purple1, 10000, 2.7f));
+        allSkins.add(new Skin("white1", "Вспышка", R.drawable.white1, 20000, 4f));
+        allSkins.add(new Skin("blue2", "Ракета", R.drawable.blue2, 50000, 6f));
     }
 
     private void loadProgress() {
@@ -182,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         Car1.setImageResource(skinGreen.getDrawableRes());
         Car2.setImageResource(skinRed.getDrawableRes());
 
-        makeCarsSameSize();
+        measureAndFixCarSize();  // ← сразу выравниваем размер
     }
 
     private Skin findSkinById(String id) {
@@ -190,19 +204,23 @@ public class MainActivity extends AppCompatActivity {
         return allSkins.get(0);
     }
 
-    private void makeCarsSameSize() {
-        Car1.post(() -> {
-            if (Car1.getMeasuredWidth() > 0) {
-                ViewGroup.LayoutParams lp = Car2.getLayoutParams();
-                lp.width = Car1.getMeasuredWidth();
-                lp.height = Car1.getMeasuredHeight();
-                Car2.setLayoutParams(lp);
-                Car2.requestLayout();
-                carLength = Car1.getMeasuredWidth();
-            }
-        });
-    }
+    private void applyFixedSizeToBothCars() {
+        if (fixedCarWidth == 0) return;
 
+        ViewGroup.LayoutParams lp1 = Car1.getLayoutParams();
+        lp1.width = fixedCarWidth;
+        lp1.height = fixedCarHeight;
+        Car1.setLayoutParams(lp1);
+
+        ViewGroup.LayoutParams lp2 = Car2.getLayoutParams();
+        lp2.width = fixedCarWidth;
+        lp2.height = fixedCarHeight;
+        Car2.setLayoutParams(lp2);
+
+        Car1.requestLayout();
+        Car2.requestLayout();
+        carLength = fixedCarWidth;
+    }
     private void showSkinShop() {
         currentShopDialog = new Dialog(this);
         currentShopDialog.setContentView(R.layout.activity_dialog_skin_shop);
@@ -215,6 +233,13 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         currentShopDialog.show();
+
+        // Делаем диалог почти на всю ширину экрана
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        Window window = currentShopDialog.getWindow();
+        if (window != null) {
+            window.setLayout((int) (dm.widthPixels * 0.85), ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
     }
 
     private List<Skin> getSortedSkins(int editingCar) {
@@ -223,14 +248,10 @@ public class MainActivity extends AppCompatActivity {
         sorted.sort((a, b) -> {
             int statusA = getSkinStatus(a, currentSelected);
             int statusB = getSkinStatus(b, currentSelected);
-            if (statusA != statusB) return Integer.compare(statusB, statusA); // выбранный > купленный > некупленный
+            if (statusA != statusB) return Integer.compare(statusB, statusA);
 
-            // Одинаковый статус
-            if (statusA == 1) { // купленные: дорогие → дешёвые
-                return Integer.compare(b.getCost(), a.getCost());
-            } else { // некупленные: дешёвые → дорогие
-                return Integer.compare(a.getCost(), b.getCost());
-            }
+            if (statusA == 1) return Integer.compare(b.getCost(), a.getCost()); // купленные: дорогие → дешёвые
+            else return Integer.compare(a.getCost(), b.getCost());             // некупленные: дешёвые → дорогие
         });
         return sorted;
     }
@@ -242,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void Start(View view){
-        Button button = (Button)findViewById(R.id.btn_start);
+        Button button = findViewById(R.id.btn_start);
         if(!Finished){
             if(!Started){
                 button.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
@@ -271,8 +292,6 @@ public class MainActivity extends AppCompatActivity {
                 int initialCarLeft = Car1.getLeft();
                 int finishLeft = findViewById(R.id.finish).getLeft();
                 travelDistance = finishLeft - initialCarLeft - carLength;
-
-                makeCarsSameSize();
             }
             else if (Stopped)
             {
@@ -315,8 +334,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void giveReward() {
+        Skin playerSkin = findSkinById(selectedSkinIdGreen);
         Skin botSkin = findSkinById(selectedSkinIdRed);
-        int reward = (botSkin.getCost() / 10) + ((int) length / 10) + (currentBotDifficulty * 30 + 20);
+        int reward = (int)((Math.pow((double)botSkin.getCost(), 2) / 10 / (double)playerSkin.getCost()) * (Math.pow(1.6, length / 50 - 1)) * (1 + (Math.pow(10, currentBotDifficulty) - 1)/10));
         coins += reward;
         saveProgress();
         Toast.makeText(this, "Победа над ботом! +" + reward + " монет", Toast.LENGTH_LONG).show();
@@ -371,7 +391,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         applySkinsToCars();
-        makeCarsSameSize();
+        applyFixedSizeToBothCars();
         if (botHandler != null) botHandler.removeCallbacks(botRunnable);
     }
 
@@ -438,9 +458,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (!Started) {
                     switch (position) {
-                        case 0: botInterval = 1200; break;
-                        case 1: botInterval = 700;  break;
-                        case 2: botInterval = 350;  break;
+                        case 0: botInterval = 570; break;
+                        case 1: botInterval = 230;  break;
+                        case 2: botInterval = 130;  break;
                     }
                 }
                 prefs.edit().putInt("selected_difficult", currentBotDifficulty).apply();
@@ -458,8 +478,8 @@ public class MainActivity extends AppCompatActivity {
         UpdateCarPoses();
 
         if (car2Pos >= length) {
-            TextView result = (TextView) findViewById(R.id.lb_result);
-            Button button = (Button) findViewById(R.id.btn_start);
+            TextView result = findViewById(R.id.lb_result);
+            Button button = findViewById(R.id.btn_start);
             result.setText(isAI ? "Победа бота!" : "Победа второго игрока");
             button.setText("Заново");
             result.setTextColor(0xfff00000);
@@ -474,12 +494,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startBot() {
-        botRunnable = new Runnable() {
-            @Override
-            public void run() {
-                moveCar2(true);
-            }
-        };
+        botRunnable = () -> moveCar2(true);
         botHandler.postDelayed(botRunnable, botInterval);
     }
 
@@ -491,8 +506,9 @@ public class MainActivity extends AppCompatActivity {
             this.editingCar = editingCar;
         }
 
+        @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_item_skin, parent, false);
             }
@@ -527,21 +543,15 @@ public class MainActivity extends AppCompatActivity {
                 if (status == 2) return;
 
                 if (status == 1) {
-                    // Выбрать
                     if (editingCar == 1) selectedSkinIdGreen = skin.getId();
                     else selectedSkinIdRed = skin.getId();
-                    saveProgress();
-                    applySkinsToCars();
                 } else {
-                    // Купить
                     if (coins >= skin.getCost()) {
                         coins -= skin.getCost();
                         boughtSkins.add(skin.getId());
-                        // авто-выбор после покупки
                         if (editingCar == 1) selectedSkinIdGreen = skin.getId();
                         else selectedSkinIdRed = skin.getId();
                         saveProgress();
-                        applySkinsToCars();
                         Toast.makeText(MainActivity.this, "Скин куплен!", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(MainActivity.this, "Недостаточно монет!", Toast.LENGTH_SHORT).show();
@@ -549,8 +559,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+                saveProgress();
+                applySkinsToCars();        // ← обновляем картинки
+                applyFixedSizeToBothCars();        // ← ИСПРАВЛЕНИЕ №2: сразу выравниваем размер
+
                 if (currentShopDialog != null) currentShopDialog.dismiss();
-                showSkinShop(); // обновляем магазин
+                showSkinShop(); // обновляем список
             });
 
             return convertView;

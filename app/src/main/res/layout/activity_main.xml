@@ -12,6 +12,7 @@
         android:id="@+id/finish"
         android:layout_width="100dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/finish_image"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,22 +25,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/first_player_sprite"
+        android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.25"
-        app:srcCompat="@drawable/car1" />
+        app:srcCompat="@drawable/car1"
+        tools:ignore="ImageContrastCheck" />
 
     <ImageView
         android:id="@+id/red_player"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/second_player_sprite"
+        android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.75"
-        app:srcCompat="@drawable/car2" />
+        app:srcCompat="@drawable/car2"
+        tools:ignore="ImageContrastCheck" />
 
     <Button
         android:id="@+id/btn_start"
@@ -47,10 +56,12 @@
         android:layout_height="51dp"
         android:backgroundTint="@android:color/holo_blue_dark"
         android:onClick="Start"
-        android:text="Старт"
+        android:text="@string/Start"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck" />
 
     <Button
         android:id="@+id/btn_green"
@@ -58,10 +69,12 @@
         android:layout_height="51dp"
         android:backgroundTint="@android:color/holo_green_dark"
         android:onClick="Drive1"
-        android:text="Газ"
+        android:text="@string/Gaz"
+        android:textColor="#212121"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_start"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="DuplicateSpeakableTextCheck,VisualLintBounds" />
 
     <Button
         android:id="@+id/btn_red"
@@ -69,10 +82,11 @@
         android:layout_height="51dp"
         android:backgroundTint="@android:color/holo_red_dark"
         android:onClick="Drive2"
-        android:text="Газ"
+        android:text="@string/Gaz"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn_start" />
+        app:layout_constraintStart_toEndOf="@+id/btn_start"
+        tools:ignore="VisualLintBounds" />
 
     <Button
         android:id="@+id/btn_exit"
@@ -80,7 +94,7 @@
         android:layout_height="51dp"
         android:backgroundTint="@android:color/holo_red_dark"
         android:onClick="Drive2"
-        android:text="Выход"
+        android:text="@string/exit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -100,19 +114,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Длина трассы:"
+        android:text="@string/track_length"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/spinner_length"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Spinner
         android:id="@+id/spinner_length"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="80dp"
-        android:background="@android:drawable/button_onoff_indicator_off"
+        android:background="@drawable/blue_card"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -122,21 +136,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Сложность:"
+        android:text="@string/diffidculty"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/spinner_difficulty"
         app:layout_constraintEnd_toEndOf="@+id/spinner_difficulty"
         app:layout_constraintStart_toStartOf="@+id/spinner_difficulty" />
 
     <Spinner
         android:id="@+id/spinner_difficulty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="80dp"
-        android:background="@android:drawable/button_onoff_indicator_off"
+        android:background="@drawable/blue_card"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.3"
-        app:layout_constraintStart_toEndOf="@+id/btn_start" />
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toEndOf="@+id/btn_start"
+        tools:ignore="VisualLintBounds" />
 </androidx.constraintlayout.widget.ConstraintLayout>
